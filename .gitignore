@@ -2,3 +2,5 @@
 
 amaurot/.terraform
 amaurot/.terraform.lock.hcl
+amaurot/*.tfstate*
+amaurot/*.tfvars

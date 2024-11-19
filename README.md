@@ -1,1 +1,3 @@
 # amaurot-deployment
+
+![](amaurot.png)
