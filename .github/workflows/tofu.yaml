@@ -22,7 +22,7 @@ jobs:
       - uses: DeterminateSystems/magic-nix-cache-action@v8
 
       - run: |
-          echo "backend = \"${{ secrets.BACKEND }}\"
+          echo "backend = \"${{ secrets.GOOGLE_BACKEND }}\"
           built = true
           region = \"${{ vars.GOOGLE_REGION }}\"
           repository_owner = \"$GITHUB_REPOSITORY_OWNER\"" > terraform.tfvars
