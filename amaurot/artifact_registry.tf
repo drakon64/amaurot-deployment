@@ -5,12 +5,12 @@ resource "google_project_service" "artifact_registry" {
 resource "google_artifact_registry_repository" "artifact_registry" {
   format        = "DOCKER"
   repository_id = "amaurot"
-  
+
   cleanup_policies {
     id = "Delete untagged"
-    
+
     action = "DELETE"
-    
+
     condition {
       tag_state = "UNTAGGED"
     }
