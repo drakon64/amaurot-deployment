@@ -46,7 +46,7 @@ resource "google_cloud_run_v2_service" "receiver" {
         failure_threshold = 3
 
         http_get {
-          path = "/healthcheck"
+          path = "/"
         }
 
         initial_delay_seconds = 1
