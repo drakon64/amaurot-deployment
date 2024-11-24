@@ -1,4 +1,8 @@
 terraform {
+  backend "gcs" {
+    bucket = var.backend
+  }
+
   required_providers {
     google = {
       source  = "hashicorp/google"

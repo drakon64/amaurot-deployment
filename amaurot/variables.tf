@@ -1,3 +1,7 @@
+variable "backend" {
+  type = string
+}
+
 variable "built" {
   type    = bool
   default = false

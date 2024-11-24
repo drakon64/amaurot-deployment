@@ -22,7 +22,8 @@ jobs:
       - uses: DeterminateSystems/magic-nix-cache-action@v8
         
       - run: |
-          echo "built = true
+          echo "backend = \"${{ secrets.BACKEND }}\"
+          built = true
           region = \"${{ vars.GOOGLE_REGION }}\"
           repository_owner = \"$GITHUB_REPOSITORY_OWNER\"" > terraform.tfvars
         working-directory: amaurot
