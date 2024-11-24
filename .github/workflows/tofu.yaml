@@ -8,7 +8,7 @@ jobs:
     permissions:
       contents: read
       id-token: write
-      
+
     runs-on: ubuntu-latest
 
     steps:
@@ -20,24 +20,24 @@ jobs:
           source-url: https://install.lix.systems/lix/lix-installer-x86_64-linux
 
       - uses: DeterminateSystems/magic-nix-cache-action@v8
-        
+
       - run: |
           echo "backend = \"${{ secrets.BACKEND }}\"
           built = true
           region = \"${{ vars.GOOGLE_REGION }}\"
           repository_owner = \"$GITHUB_REPOSITORY_OWNER\"" > terraform.tfvars
         working-directory: amaurot
-        
-      - run: nix-build shell.nix
 
-      - name: tofu init
-        run: nix-shell --run "tofu init" ../shell.nix
-        working-directory: amaurot
-        
+      - run: nix-shell --run "exit" shell.nix
+
       - uses: google-github-actions/auth@v2
         with:
           service_account: ${{ secrets.GOOGLE_SERVICE_ACCOUNT }}
           workload_identity_provider: ${{ secrets.GOOGLE_WORKLOAD_IDENTITY_PROVIDER }}
+
+      - name: tofu init
+        run: nix-shell --run "tofu init" ../shell.nix
+        working-directory: amaurot
 
       - name: tofu plan
         run: nix-shell --run "tofu plan" ../shell.nix
