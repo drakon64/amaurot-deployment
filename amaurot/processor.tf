@@ -22,7 +22,7 @@ resource "google_cloud_run_v2_service" "processor" {
         name = "GITHUB_PRIVATE_KEY"
         value_source {
           secret_key_ref {
-            secret  = google_secret_manager_secret.secret["private-key"].name
+            secret  = google_secret_manager_secret.secret["github-private-key"].name
             version = "latest"
           }
         }
@@ -48,6 +48,11 @@ resource "google_cloud_run_v2_service" "processor" {
         period_seconds        = 3
         timeout_seconds       = 3
       }
+
+      volume_mounts {
+        mount_path = "/ssh"
+        name       = "ssh-private-key"
+      }
     }
 
     scaling {
@@ -57,11 +62,25 @@ resource "google_cloud_run_v2_service" "processor" {
 
     session_affinity = true
     service_account  = google_service_account.processor.email
+
+    volumes {
+      name = "ssh-private-key"
+
+      secret {
+        default_mode = 256 // 0400 converted from octal to decimal
+        secret       = "ssh-private-key"
+
+        items {
+          path    = "ssh-private-key"
+          version = "latest"
+        }
+      }
+    }
   }
 
   depends_on = [
     google_project_service.cloud_run,
-    google_secret_manager_secret_iam_member.processor
+    google_secret_manager_secret_iam_member.processor,
   ]
 }
 
