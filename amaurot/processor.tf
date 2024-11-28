@@ -38,15 +38,15 @@ resource "google_cloud_run_v2_service" "processor" {
       }
 
       startup_probe {
-        failure_threshold = 3
+        failure_threshold = 9
 
         http_get {
           path = "/"
         }
 
         initial_delay_seconds = 1
-        period_seconds        = 3
-        timeout_seconds       = 3
+        period_seconds        = 1
+        timeout_seconds       = 1
       }
 
       dynamic "volume_mounts" {
