@@ -49,9 +49,13 @@ resource "google_cloud_run_v2_service" "processor" {
         timeout_seconds       = 3
       }
 
-      volume_mounts {
-        mount_path = "/ssh"
-        name       = "ssh-private-key"
+      dynamic "volume_mounts" {
+        for_each = var.use_ssh_private_key ? [true] : []
+
+        content {
+          mount_path = "/ssh"
+          name       = "ssh-private-key"
+        }
       }
     }
 
@@ -63,16 +67,20 @@ resource "google_cloud_run_v2_service" "processor" {
     session_affinity = true
     service_account  = google_service_account.processor.email
 
-    volumes {
-      name = "ssh-private-key"
+    dynamic "volumes" {
+      for_each = var.use_ssh_private_key ? [true] : []
 
-      secret {
-        default_mode = 256 // 0400 converted from octal to decimal
-        secret       = "ssh-private-key"
+      content {
+        name = "ssh-private-key"
 
-        items {
-          path    = "ssh-private-key"
-          version = "latest"
+        secret {
+          default_mode = 256 // 0400 converted from octal to decimal
+          secret       = "ssh-private-key"
+
+          items {
+            path    = "ssh-private-key"
+            version = "latest"
+          }
         }
       }
     }

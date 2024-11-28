@@ -14,3 +14,8 @@ variable "region" {
 variable "repository_owner" {
   type = string
 }
+
+variable "use_ssh_private_key" {
+  type    = bool
+  default = false
+}

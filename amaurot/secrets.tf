@@ -3,12 +3,11 @@ resource "google_project_service" "secret_manager" {
 }
 
 resource "google_secret_manager_secret" "secret" {
-  for_each = toset([
+  for_each = toset(flatten(concat([
     "client-id",
     "github-private-key",
-    "ssh-private-key",
     "webhook-secret",
-  ])
+  ], [var.use_ssh_private_key ? ["ssh-private-key"] : []])))
 
   secret_id = each.value
 
@@ -26,11 +25,10 @@ resource "google_secret_manager_secret_iam_member" "receiver" {
 }
 
 resource "google_secret_manager_secret_iam_member" "processor" {
-  for_each = toset([
+  for_each = toset(flatten(concat([
     "client-id",
     "github-private-key",
-    "ssh-private-key",
-  ])
+  ], [var.use_ssh_private_key ? ["ssh-private-key"] : []])))
 
   member    = google_service_account.processor.member
   role      = "roles/secretmanager.secretAccessor"
